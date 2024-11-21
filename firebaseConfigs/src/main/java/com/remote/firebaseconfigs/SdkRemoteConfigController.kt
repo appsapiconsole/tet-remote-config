@@ -69,6 +69,7 @@ object SdkRemoteConfigController {
         callback: SdkConfigListener?,
         fetchOutTimeInSeconds: Long = 8,
         handlerDelayInSeconds: Long = 8,
+        fetchIntervalInSeconds: Long = 1,
         onUpdate: () -> Unit,
     ) {
         try {
@@ -83,9 +84,7 @@ object SdkRemoteConfigController {
             )
             val remoteConfigBuilder = FirebaseRemoteConfigSettings.Builder()
             remoteConfigBuilder.fetchTimeoutInSeconds = fetchOutTimeInSeconds
-            if (com.google.firebase.remoteconfig.BuildConfig.DEBUG) {
-                remoteConfigBuilder.setMinimumFetchIntervalInSeconds(0)
-            }
+            remoteConfigBuilder.setMinimumFetchIntervalInSeconds(fetchIntervalInSeconds)
             remoteConfig?.setConfigSettingsAsync(
                 remoteConfigBuilder.build()
             )
